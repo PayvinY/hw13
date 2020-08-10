@@ -1,0 +1,29 @@
+---
+- name: create devops gropu
+  group:
+    name: devops
+    state: present
+
+- name: Add the user devops, home /home/devopsfiles and group devops.
+  user:
+    name: devops
+    home: /home/devopsfiles
+    group: devops
+    groups: adm,devops
+    append: yes
+
+- name: create home directory
+  file:
+    path: /home/devopsfiles/.ssh/
+    state: directory
+    owner: devops
+    group: devops
+    mode: 0755
+
+- name: copy pub key
+  copy:
+    src: devops-user.pem.pub
+    dest: /home/devopsfiles/.ssh/authorized_keys
+    owner: devops
+    group: devops
+    mode: '0400'

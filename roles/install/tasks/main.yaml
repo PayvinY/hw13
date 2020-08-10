@@ -1,0 +1,14 @@
+---
+- name: Update
+  apt:
+   update_cache: yes
+   force_apt_get: yes
+
+- name: Install nginx
+  apt: 
+   name: nginx
+   state: latest
+    
+- name: Install php-fpm
+  apt:
+   name: php-fpm

@@ -1,0 +1,18 @@
+---
+- name: Setup webserver and install application
+  hosts: aws
+  roles:
+    - install
+    - configure
+    - restart
+    - add_devops
+
+  tasks:
+  - name: check for successful deployment
+    uri:  
+      url: "http://{{ inventory_hostname }}/"
+      return_content: yes
+    register: result
+    until: '"Hillel" in result.content'
+    retries: 2
+    delay: 2       

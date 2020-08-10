@@ -1,0 +1,40 @@
+---
+- name: Copy nginx config file
+  copy:
+   src: default
+   dest: /etc/nginx/sites-available/default
+
+- name: Copy www data
+  copy:
+   src: ./www_test/
+   dest: /var/www/default/
+    
+- name: Make text link to config file
+  file:
+   src: /etc/nginx/sites-available/default
+   dest: /var/www/default/nginx_conf.txt
+   state: link
+    
+- name: Copy default link
+  file:
+   src: /etc/nginx/sites-available/default
+   dest: /etc/nginx/conf.d/default.conf
+   state: link
+        
+- name: Configure php-fpm throw IP port 9000
+  lineinfile:
+   path: /etc/php/7.2/fpm/pool.d/www.conf
+   regexp: '^listen =*' 
+   line: 'listen = 127.0.0.1:9000;'
+  
+- name: Enable localhost
+  lineinfile:
+   path: /etc/php/7.2/fpm/pool.d/www.conf
+   regexp: '^;listen.allowed_clients =*' 
+   line: 'listen.allowed_clients = 127.0.0.1;'
+    
+   #- namme: Correct nginx default file
+   # lineinfile:
+   #path: /etc/nginx/sites-available/default
+   #regexp: '^*fastcgi_pass*' 
+   #line: 'fastcgi_pass unix: 127.0.0.1:9000'

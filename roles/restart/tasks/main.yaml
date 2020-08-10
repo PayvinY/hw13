@@ -1,0 +1,11 @@
+---
+- name: Enable and start PHP-FPM service
+  systemd:
+    name: php7.2-fpm.service
+    enabled: true
+    state: restarted
+
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted  
